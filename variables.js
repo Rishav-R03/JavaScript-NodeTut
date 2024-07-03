@@ -14,4 +14,10 @@ console.table([fName,lName,accountNo,mobNo])
 let person = { // javascript object with attributes
         name :"Rishav",
         age : 21
-    }
+}
+
+let arr = [1,2,3]
+
+arr[2] = "new"
+
+console.log(arr)
