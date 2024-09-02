@@ -20,3 +20,14 @@ function addNum(num1,num2){
 }
 addNum(3,4);
 // addNum(3,"a");
+
+
+function loginUser(username){
+    if(username===undefined){
+        console.log('Please enter a username');
+        return
+    }
+    return `${username} just logged in`;
+
+}
+console.log(loginUser("Rishav"));
