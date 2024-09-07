@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Objects Display in JavaScript</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Objects Display in JavaScript</h2>
+        <p>Displaying a JavaScript object will output [object Object].</p>
+        <p>Some solutions to display JavaScript objects are:<br>
+            <br>
+            Displaying the Object Properties by name <br>
+            Displaying the Object Properties in a Loop <br>
+            Displaying the Object using Object.values() <br>
+            Displaying the Object using JSON.stringify() <br>
+        </p>
+        <p id="demo"></p>
+        <p id="demo1"></p>
+        <p id="demo2"></p>
+        <p id="demo3"></p>
+        <p id="demo4"></p>
+        <p id="demo5"></p>
+        <p id="demo"></p>
+    </div>
+
+
+    <script>
+        const person = {
+            firstName: "John",
+            lastName: "Doe",
+            age: 50,
+            eyeColor: "blue"
+        };
+        //problem
+        document.getElementById("demo").innerHTML = person;
+        //solution
+        document.getElementById("demo1").innerHTML = JSON.stringify(person);
+        // document.getElementById("demo6").innerHTML =( JSON.stringify(person)).toString();
+        //solution 2
+        document.getElementById("demo2").innerHTML = person.firstName + " " + person.lastName;
+        //solution 3
+
+        //build a text
+        let text = "";
+        for (let x in person) {
+            text += person[x] + " ";
+        };
+        document.getElementById("demo3").innerHTML = text;
+
+        //solution 4
+        const myArr = Object.values(person);
+        document.getElementById("demo4").innerHTML = myArr;
+
+        //solution 5
+        let text2 = "";
+        const fruits = { Banana: 300, Oranges: 200, Apples: 100 };
+        for (let [fruit, value] of Object.entries(fruits)) {
+            text2 += fruit + ":" + value + "<br> ";
+        }
+        document.getElementById("demo5").innerHTML = text2;
+    </script>
+</body>
+
+</html>
