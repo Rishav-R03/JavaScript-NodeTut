@@ -23,3 +23,11 @@ console.log(newComic);
 
 const newSpread = [...marvel_heroes, ...dc_heroes];
 console.log(newSpread);
+
+//nested arrays element extraction 
+
+const nestedArray = [1,2,[3,4,[5,6]]];
+
+console.log(nestedArray.flat(1));
+console.log(nestedArray.flat(Infinity));
+
