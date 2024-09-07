@@ -8,5 +8,10 @@ const mylength = myArr.length;
 console.log(mylength);
 
 
+//array methods
 
+myArr.push("last index");
+console.log(myArr);
+console.log(mylength);
+myArr.pop();
 
