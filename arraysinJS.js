@@ -15,3 +15,11 @@ console.log(myArr);
 console.log(mylength);
 myArr.pop();
 
+const marvel_heroes = ["ironman", "thor", "hulk", "spiderman", "captain america"];
+const dc_heroes = ["batman", "superman", "wonderwoman", "aquaman", "flash"];
+
+const newComic = marvel_heroes.concat(dc_heroes);
+console.log(newComic);
+
+const newSpread = [...marvel_heroes, ...dc_heroes];
+console.log(newSpread);
