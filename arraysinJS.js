@@ -31,3 +31,12 @@ const nestedArray = [1,2,[3,4,[5,6]]];
 console.log(nestedArray.flat(1));
 console.log(nestedArray.flat(Infinity));
 
+console.log(Array.isArray("Rishav"));
+console.log(Array.from("Rishav"));
+console.log(Array.from({name:"Rishav"}));//interesting generate array from keys 
+
+let score1 = 50;
+let score2 = 40;
+let score3 = 100;
+
+console.log(Array.of(score1,score2,score3));
