@@ -2,7 +2,9 @@ console.log("hello world");
 
 const express = require("express");
 const app = express();
+// const env = require("dotenv");
 
+// env.config();
 app.get('/',(req,res)=>{
     res.send('Hello World');
 });
