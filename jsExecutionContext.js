@@ -37,4 +37,13 @@ console.log(result)
     global execution context - gets deleted after execution.
  */
 
+//call stack
 
+/**
+ * LiFO
+ * function is removed after execution - popped
+ * function is entered at stack
+ * global execution context
+ */
+
+//use sources and snippets in browser
