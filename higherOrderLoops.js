@@ -91,5 +91,5 @@ const myCoding = [
     }
 ]
 myCoding.forEach((item)=>{
-    console.log(item.languageShortcut +" "+item.languageName);
+    console.log(itemlanguageShortcut +" "+item.languageName);
 })
