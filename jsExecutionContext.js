@@ -32,6 +32,9 @@ console.log(result)
  * while executing sum function we will create new variable environment + execution thread 
  * now for each time function will called it create new block(new variable env + execution thread) 
   and it will perform creation phase and execution phase
+
+  returning the sum result will be done at global execution context;
+    global execution context - gets deleted after execution.
  */
 
-  
+
