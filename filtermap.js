@@ -4,6 +4,16 @@ coding.forEach((item)=>{
 })
 
 const myNums = [1,2,3,4,5,6,7,8,9,10];
+
+const tenAdd = [];
+myNums.forEach((item)=>{
+    tenAdd.push(item+10);
+})
+
+const updated = myNums.map((item) => item*10);
+console.log(updated);
+console.log(tenAdd);
+
 const newNums = myNums.filter((item)=>item>4);
 // const newNums1 = myNums.filter((item)=>{return item>4});
 //using scope {} requires return keyword.
