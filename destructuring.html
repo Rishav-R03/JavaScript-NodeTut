@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destruturing in JavaScript</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Destructuring in JavaScript</h2>
+    <p>Destructuring is a JavaScript expression that allows you to unpack values from arrays, or properties from
+        objects, into distinct variables.</p>
+    <p>It can also unpack arrays and any other iterables</p>
+    <p id="demo1"></p>
+    <br>
+    <p>We can access the array elements using destructuring</p>
+    <p id="demo2"></p>
+
+
+    <script>
+        const employee = {
+            firstName: "Rishav",
+            lastName: "Raj",
+            age: 21
+        }
+        let { firstName, lastName } = employee;
+        // document.write(firstName + " " + lastName);
+
+        //writing object in such way renames the object's attribute
+        let { firstName: fName, lastName: lName } = employee;
+        document.getElementById('demo1').innerHTML = firstName + " " + lastName;
+
+        const fruits = ["Apple", "Banana", "Orange", " Mango"];
+        let [a, b] = fruits;
+
+        document.getElementById('demo2').innerHTML = a + " " + b;
+
+    </script>
+</body>
+
+</html>
