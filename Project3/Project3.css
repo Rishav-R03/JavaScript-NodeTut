@@ -1,0 +1,22 @@
+*{  
+    background-color: #212121;
+    color:white;
+}
+.center{
+    height: 200px;
+    width:200px;
+    border: 2px solid white;
+    display: flex;
+    /* justify-content: center;
+     */
+    align-items: center;
+     justify-content: center;
+}
+#clock{
+    height: 50px;
+    width:50px;
+    border: 2px solid white;
+    color: white;
+    margin:10px;
+    /* background: white; */
+}
