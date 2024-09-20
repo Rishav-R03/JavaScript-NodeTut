@@ -13,7 +13,7 @@
     </style>
 </head>
 
-<body>
+<body style="background-color: #212121; color: white">
     <h2>Destructuring in JavaScript</h2>
     <p>Destructuring is a JavaScript expression that allows you to unpack values from arrays, or properties from
         objects, into distinct variables.</p>
@@ -22,6 +22,9 @@
     <br>
     <p>We can access the array elements using destructuring</p>
     <p id="demo2"></p>
+    <br>
+    <p>We can skip the array elements using destructuring</p>
+    <p id="demo3"></p>
 
 
     <script>
@@ -42,6 +45,10 @@
 
         document.getElementById('demo2').innerHTML = a + " " + b;
 
+        //skipping the elements 
+
+        let [c, , d] = fruits;
+        document.getElementById('demo3').innerHTML = c + " " + d;
     </script>
 </body>
 
