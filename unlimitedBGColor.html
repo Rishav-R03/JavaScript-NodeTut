@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unlimited BG Color</title>
+    <style>
+        body {
+            background-color: #212121;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Unlimited background-color</h2>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+</body>
+<script>
+    let intervalId; // Store interval ID here
+
+    const randomColor = () => {
+        const hex = "0123456789ABCDEF";
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+            color += hex[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
+
+    const startChange = () => {
+        if (!intervalId) { // Check if interval is not already running
+            intervalId = setInterval(() => {
+                document.body.style.backgroundColor = randomColor();
+            }, 1000);
+        }
+    };
+
+    const stopChange = () => {
+        clearInterval(intervalId); // Stop the interval
+        intervalId = null; // Reset the intervalId
+        document.body.style.backgroundColor = "#212121"; // Reset to original background
+    };
+
+    document.querySelector("#start").addEventListener('click', startChange);
+    document.querySelector("#stop").addEventListener('click', stopChange);
+</script>
+
+</html>
