@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous Nature of JS</title>
+    <style>
+        body {
+            background-color: #212121;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Asynchronous Nature of JS</h2>
+    <button id="btn">Stop</button>
+</body>
+<script>
+    /*
+     *Single threaded js
+     * Asynchronous nature
+     * blocking code : Blokck the flow of program execution, read the file sync
+     * non-blocking code : Non block the flow of program execution(doesn't block the flow), read the file async 
+     * 
+     */
+    const sayRishav = function () {
+        console.log("Rishav");
+    }
+
+    setTimeout(() => {
+        console.log("Hello JS");
+    }, 2000) //handlers are functions without names
+    const changeText = () => {
+        document.querySelector('h2').innerHTML = "Rishav learning JS";
+    }
+    setTimeout(sayRishav, 2000);
+    const changeMe = setTimeout(changeText, 2000);
+
+    document.querySelector('#btn').addEventListener('click', () => {
+        clearTimeout(changeMe);
+        console.log("Stopped");
+
+    })
+</script>
+
+</html>
