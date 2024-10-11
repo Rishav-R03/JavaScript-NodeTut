@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeyBoards in JS</title>
+</head>
+<h2>KeyBoard Events</h2>
+<div id="insert"></div>
+
+<body>
+
+</body>
+<script>
+    const insert = document.getElementById('insert');
+    window.addEventListener('keydown', (e) => {
+        insert.innerHTML = `
+            <div class="key">
+                <table>
+                    <tr>
+                        <th>Key</th>
+                        <th>Code </th>
+                        <th>Keycode</th>
+                    </tr>
+                    <tr>
+                        <td>${e.key === " " ? 'space' : e.key}</td>
+                        <td>${e.code}</td>
+                        <td>${e.keyCode}</td>
+                    </tr>
+                </table>
+            </div>  
+        `;
+    })
+</script>
+
+</html>
