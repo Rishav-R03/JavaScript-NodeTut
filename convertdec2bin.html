@@ -10,7 +10,36 @@
             background-color: #212121;
             color: white;
             border: 2px solid white;
-            height: 500px;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .container1 {
+            margin-bottom: 10px;
+            border: 2px solid white;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        #result1 {
+            margin-top: 2px;
+        }
+        #result2 {
+            margin-top: 2px;
+        }
+
+        .container2 {
+            margin: 10px 10px;
+            border: 2px solid white;
+            height: 200px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,24 +60,42 @@
 </head>
 
 <body>
-    <h2>Convert a Decimal Number to Binary</h2>
-    <p>Enter a number in decimal format</p>
-    <input type="number">
-    <button>Convert</button>
-    <p id="result"></p>
+    <div class="container1">
+        <h2>Convert a Decimal Number to Binary</h2>
+        <p>Enter a number in decimal format</p>
+        <input type="number" id="input1">
+        <button id="button1">Convert</button>
+        <p id="result1"></p>
+    </div>
+    <div class="container2">
+        <h2>Convert a Binary Number to Decimal</h2>
+        <p>Enter a number in binary format</p>
+        <input type="number" id="input2">
+        <button id="button2">Convert</button>
+        <p id="result2"></p>
+    </div>
 </body>
 <script>
-    let val = document.querySelector('input');
-    let btn = document.querySelector('button');
-    let result = document.querySelector('#result');
+    let val1 = document.querySelector('#input1');
+    let btn1 = document.querySelector('#button1');
+    let result1 = document.querySelector('#result1');
 
-    function dec2bin(val) {
-        return (val >>> 0).toString(2);
+    function dec2bin(val1) {
+        return (val1 >>> 0).toString(2);
     }
-    btn.addEventListener('click', () => {
-        result.innerHTML = "Your result is " + dec2bin(val.value);
+    btn1.addEventListener('click', () => {
+        result1.innerHTML = "Your result is " + dec2bin(val1.value);
     })
+    let val2 = document.querySelector('#input2')
+    let btn2 = document.querySelector('#button2')
+    let result2 = document.querySelector('#result2')
 
+    function bin2dec(bin) {
+        return parseInt(bin, 2).toString(10);
+    }
+    btn2.addEventListener('click', () => {
+        result2.innerHTML = "Your result is " + bin2dec(val2.value);
+    })
 </script>
 
 </html>
