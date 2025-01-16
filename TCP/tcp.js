@@ -11,6 +11,6 @@ const server = net.createServer(socket => {
     });
 });
 
-server.listen(5000, "0.0.0.0", () => {
+server.listen(PORT = 5000, "0.0.0.0", () => {
     console.log("Server listening on port 5000");
 });
