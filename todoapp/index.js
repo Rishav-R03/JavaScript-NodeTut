@@ -1,10 +1,12 @@
 import express from 'express' 
 import {conn} from './db.js'
+import cors from 'cors';
 
 const app = express()
 
 // middleware
 app.use(express.json())
+app.use(cors());
 
 // connect to database
 conn.connect()
