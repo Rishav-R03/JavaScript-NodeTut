@@ -43,7 +43,18 @@ const chechAuth = (req,res,next)=>{
         res.status(401).json({message:"Unauthorization access"});
     }
 }
+const checkEligible = (req,res,next)=>{
+    const points = 60
+    if(points>100){
+        res.status(201).send(`you are eligible to claim!`)
+    }else{
+        res.status(401).send(`You are not eligible, you need ${100-points} more points to claim prize!`)
+    }
+}
 
+app.get('/claimPrize',checkEligible,(req,res)=>{
+    res.send(`click to claim your prize! `)
+})
 // protected route 
 app.get('/dashboard',chechAuth,(req,res)=>{
     res.send('Welcome to your dashboard!');
