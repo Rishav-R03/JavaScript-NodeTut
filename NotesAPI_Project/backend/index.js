@@ -19,12 +19,12 @@ conn.connect()
 
 // middlewares
 app.use(helmet())
-const limit = new ratelimit({
+const limit = ratelimit({
   windowMs:10*60*1000,
   max:5,
-  mm,
   message:"Too many bad requests try again after 10 minutes!"
 })
+
 app.use(limit);
 dotenv.config()
 app.use(express.json())
@@ -296,6 +296,38 @@ app.get('/getUsers', authenticateToken, async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
+//search api 
+app.get('/searchNotes', authenticateToken, async (req, res) => {
+  const userId = req.user.id; // <-- use this if token payload is { id, name, email }
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({
+      error: true,
+      message: "Search query is required",
+    });
+  }
+
+  try {
+    const searchQuery = `
+      SELECT id, title, content, is_pinned 
+      FROM notes 
+      WHERE user_id = $1 AND (title ILIKE $2 OR content ILIKE $2)
+    `;
+    const result = await conn.query(searchQuery, [userId, `%${query}%`]);
+
+    return res.status(200).json({
+      message: "Search results fetched!",
+      count: result.rows.length,
+      notes: result.rows,
+    });
+  } catch (err) {
+    console.error("Error searching notes:", err.message);
+    return res.status(500).json({ message: "Internal server error!" });
+  }
+});
+
 
 app.listen(3000,()=>{
     console.log(`server is running at http://localhost:3000`)
