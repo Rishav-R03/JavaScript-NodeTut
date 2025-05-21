@@ -1,4 +1,4 @@
-import {Client } from 'pg'
+import {Client} from 'pg'
 
 export const conn = new Client({
     user:"postgres",
@@ -8,4 +8,4 @@ export const conn = new Client({
     port:5432
 })
 
-export default conn
+export default conn 
