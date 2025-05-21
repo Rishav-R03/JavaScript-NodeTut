@@ -8,7 +8,7 @@ import userSchema from './models/user.model.js'
 import bcrypt from 'bcrypt'
 import webToken from 'jsonwebtoken'
 import ratelimit from 'express-rate-limit'
-
+import helmet from 'helmet'
 
 const app = express();
 //db connection 
@@ -18,19 +18,26 @@ conn.connect()
     .catch(err=>console.log('error connected with database!'))
 
 // middlewares
+app.use(helmet())
 const limit = new ratelimit({
   windowMs:10*60*1000,
   max:5,
   mm,
   message:"Too many bad requests try again after 10 minutes!"
 })
-
+app.use(limit);
 dotenv.config()
 app.use(express.json())
 app.use(morgan('dev'))
 app.use(cors({
     origin:"*",
 }))
+//error handler 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({ message: err.message || "Something broke!" });
+});
+
 
 
 //routes
@@ -266,7 +273,29 @@ app.delete('/delete/:noteId',authenticateToken,async (req,res)=>{
   }
 })
 
+// get all the users 
+app.get('/getUsers', authenticateToken, async (req, res) => {
+  const userId = req.user.id;
 
+  const seeUserQuery = 'SELECT name, email FROM signup_table WHERE id = $1';
+
+  try {
+    const isUser = await conn.query(seeUserQuery, [userId]);
+
+    if (isUser.rows.length === 0) {
+      return res.status(404).json({ message: "No user found!" });
+    }
+
+    return res.status(200).json({
+      user: isUser.rows[0],
+      message: "User fetched successfully",
+    });
+
+  } catch (err) {
+    console.error("Error fetching user:", err.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 app.listen(3000,()=>{
     console.log(`server is running at http://localhost:3000`)
