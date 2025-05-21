@@ -238,9 +238,26 @@ app.get('/allNotesByUserID',authenticateToken,async (req,res)=>{
   }
 })
 
-app.delete('/delete/:noteId',authenticateToken,(req,res)=>{
-
+app.delete('/delete/:noteId',authenticateToken,async (req,res)=>{
+  const noteId = req.params.noteId 
+  
+  const deleteQuery = 'DELETE FROM notes WHERE id = $1';
+  //running query 
+  try{
+  const result = await conn.query(deleteQuery,[noteId]);
+  if(result.rowCount === 0){
+    return res.status(404).json({message:'Note not found'})
+  }
+  res.status(200).json({
+    message:"Deleted record!",
+  })
+  
+  }catch(err){
+    console.error("Failed to deleted! ",err.message);
+    res.status(500).json({message:"Internal server error"});
+  }
 })
+
 app.listen(3000,()=>{
     console.log(`server is running at http://localhost:3000`)
 })
