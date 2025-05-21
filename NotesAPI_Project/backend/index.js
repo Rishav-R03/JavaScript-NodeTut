@@ -7,6 +7,7 @@ import authenticateToken from './utilities.js'
 import userSchema from './models/user.model.js'
 import bcrypt from 'bcrypt'
 import webToken from 'jsonwebtoken'
+import ratelimit from 'express-rate-limit'
 
 
 const app = express();
@@ -17,6 +18,13 @@ conn.connect()
     .catch(err=>console.log('error connected with database!'))
 
 // middlewares
+const limit = new ratelimit({
+  windowMs:10*60*1000,
+  max:5,
+  mm,
+  message:"Too many bad requests try again after 10 minutes!"
+})
+
 dotenv.config()
 app.use(express.json())
 app.use(morgan('dev'))
