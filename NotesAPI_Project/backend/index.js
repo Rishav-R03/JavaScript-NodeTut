@@ -174,73 +174,42 @@ app.post('/add-note',authenticateToken,async (req,res)=>{
 })
 // update the notes 
 
-app.put('/updateNote/:notesId', authenticateToken, async (req, res) => {
-  const notesId = req.params.notesId;
-  const { title, content, is_pinned } = req.body;
-  const user = req.user; // already available from token
+app.get('/allNotes', authenticateToken, async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const { user } = req.user;
 
-  // Check if at least one field is being updated
-  if (!title && !content && typeof is_pinned === 'undefined') {
-    return res.status(400).json({ message: "No changes provided" });
-  }
+  const parsedPage = parseInt(page);
+  const parsedLimit = parseInt(limit);
+  const offset = (parsedPage - 1) * parsedLimit;
 
   try {
-    const searchNote = 'SELECT * FROM notes WHERE id = $1 AND user_id = $2';
-    const result = await conn.query(searchNote, [notesId, user.id]);
+    // Get total count for pagination metadata
+    const countQuery = 'SELECT COUNT(*) FROM notes WHERE user_id = $1';
+    const countResult = await conn.query(countQuery, [user.id]);
+    const totalNotes = parseInt(countResult.rows[0].count);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'Note not found!' });
-    }
-
-    // Build dynamic query
-    const updateFields = [];
-    const updateValues = [];
-    let index = 1;
-
-    if (title) {
-      updateFields.push(`title = $${index++}`);
-      updateValues.push(title);
-    }
-    if (content) {
-      updateFields.push(`content = $${index++}`);
-      updateValues.push(content);
-    }
-    if (typeof is_pinned !== 'undefined') {
-      updateFields.push(`is_pinned = $${index++}`);
-      updateValues.push(is_pinned);
-    }
-
-    const updateQuery = `
-      UPDATE notes
-      SET ${updateFields.join(', ')}
-      WHERE id = $${index++} AND user_id = $${index}
+    // Paginated query
+    const notesQuery = `
+      SELECT * FROM notes 
+      WHERE user_id = $1 
+      ORDER BY created_at DESC 
+      LIMIT $2 OFFSET $3
     `;
-    updateValues.push(notesId, user.id);
+    const notesResult = await conn.query(notesQuery, [user.id, parsedLimit, offset]);
 
-    await conn.query(updateQuery, updateValues);
-
-    return res.status(200).json({ message: 'Note updated successfully!' });
-
+    res.status(200).json({
+      message: "Notes fetched with pagination",
+      currentPage: parsedPage,
+      totalPages: Math.ceil(totalNotes / parsedLimit),
+      totalNotes,
+      notes: notesResult.rows
+    });
   } catch (err) {
-    console.error('Error in updating:', err.message);
-    return res.status(500).json({ message: "Error in server" });
+    console.error("Error fetching notes with pagination:", err.message);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
-// fetch all notes -- admin 
-app.get('/allNotes',authenticateToken,async (req,res)=>{
-  const getallNotes = 'SELECT * FROM notes';
-  const results = await conn.query(getallNotes);
-  const result = results.rows;
-  try{
-    res.status(200).json({
-      message:"Fetched all notes",
-      result:result
-    })
-  }catch(err){
-    console.error("Error while getting the notes",err.message);
-    res.status(500).json({message:"Internal server!"})
-  }
-})
+
 // fetch all nots ---byuserid 
 app.get('/allNotesByUserID',authenticateToken,async (req,res)=>{
   const userId = req.user.id;
@@ -327,6 +296,7 @@ app.get('/searchNotes', authenticateToken, async (req, res) => {
     return res.status(500).json({ message: "Internal server error!" });
   }
 });
+
 
 
 app.listen(3000,()=>{
