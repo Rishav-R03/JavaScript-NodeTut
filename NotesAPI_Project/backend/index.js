@@ -7,8 +7,6 @@ import authenticateToken from './utilities.js'
 import userSchema from './models/user.model.js'
 import bcrypt from 'bcrypt'
 import webToken from 'jsonwebtoken'
-import noteSchema from './models/note.model.js'
-import noteUpdateSchema from './models/updatenote.model.js'
 
 
 const app = express();
@@ -159,6 +157,59 @@ app.post('/add-note',authenticateToken,async (req,res)=>{
         return res.status(500).json({message:"Unable to reach server"})
     }
 })
+
+app.put('/updateNote/:notesId', authenticateToken, async (req, res) => {
+  const notesId = req.params.notesId;
+  const { title, content, is_pinned } = req.body;
+  const user = req.user; // already available from token
+
+  // Check if at least one field is being updated
+  if (!title && !content && typeof is_pinned === 'undefined') {
+    return res.status(400).json({ message: "No changes provided" });
+  }
+
+  try {
+    const searchNote = 'SELECT * FROM notes WHERE id = $1 AND user_id = $2';
+    const result = await conn.query(searchNote, [notesId, user.id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Note not found!' });
+    }
+
+    // Build dynamic query
+    const updateFields = [];
+    const updateValues = [];
+    let index = 1;
+
+    if (title) {
+      updateFields.push(`title = $${index++}`);
+      updateValues.push(title);
+    }
+    if (content) {
+      updateFields.push(`content = $${index++}`);
+      updateValues.push(content);
+    }
+    if (typeof is_pinned !== 'undefined') {
+      updateFields.push(`is_pinned = $${index++}`);
+      updateValues.push(is_pinned);
+    }
+
+    const updateQuery = `
+      UPDATE notes
+      SET ${updateFields.join(', ')}
+      WHERE id = $${index++} AND user_id = $${index}
+    `;
+    updateValues.push(notesId, user.id);
+
+    await conn.query(updateQuery, updateValues);
+
+    return res.status(200).json({ message: 'Note updated successfully!' });
+
+  } catch (err) {
+    console.error('Error in updating:', err.message);
+    return res.status(500).json({ message: "Error in server" });
+  }
+});
 
 
 app.listen(3000,()=>{
