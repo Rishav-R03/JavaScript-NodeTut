@@ -116,7 +116,7 @@ app.post('/login',async (req,res)=>{
 const tokenBlacklist = new Set();
 
 // logout api 
-app.post('/logout', (req, res) => {
+app.post('/logout', async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -125,7 +125,7 @@ app.post('/logout', (req, res) => {
   tokenBlacklist.add(token); // optionally store with an expiry (e.g., using Redis TTL)
   return res.status(200).json({ message: 'Token invalidated. User logged out.' });
 });
-
+// add new notes
 app.post('/add-note',authenticateToken,async (req,res)=>{
     const {title,content,is_pinned} = req.body;
     const currUser = req.user;
@@ -157,6 +157,7 @@ app.post('/add-note',authenticateToken,async (req,res)=>{
         return res.status(500).json({message:"Unable to reach server"})
     }
 })
+// update the notes 
 
 app.put('/updateNote/:notesId', authenticateToken, async (req, res) => {
   const notesId = req.params.notesId;
@@ -210,8 +211,36 @@ app.put('/updateNote/:notesId', authenticateToken, async (req, res) => {
     return res.status(500).json({ message: "Error in server" });
   }
 });
+// fetch all notes -- admin 
+app.get('/allNotes',authenticateToken,async (req,res)=>{
+  const getallNotes = 'SELECT * FROM notes';
+  const results = await conn.query(getallNotes);
+  const result = results.rows;
+  try{
+    res.status(200).json({
+      message:"Fetched all notes",
+      result:result
+    })
+  }catch(err){
+    console.error("Error while getting the notes",err.message);
+    res.status(500).json({message:"Internal server!"})
+  }
+})
+// fetch all nots ---byuserid 
+app.get('/allNotesByUserID',authenticateToken,async (req,res)=>{
+  const userId = req.user.id;
+  try {
+    const result = await conn.query('SELECT * FROM notes WHERE user_id = $1', [userId]);
+    res.status(200).json({ message: "Your notes", notes: result.rows });
+  } catch (err) {
+    console.error("Error while getting notes", err.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+})
 
+app.delete('/delete/:noteId',authenticateToken,(req,res)=>{
 
+})
 app.listen(3000,()=>{
     console.log(`server is running at http://localhost:3000`)
 })
